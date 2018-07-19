@@ -171,7 +171,7 @@ namespace DrunkPeopleTest
                         Console.CursorLeft--;
                     }
                 }
-                //ultima riga torna a casa dritto
+
                 if (Console.CursorLeft < 20)
                 {
                     while (Console.CursorLeft < 10)
@@ -190,8 +190,6 @@ namespace DrunkPeopleTest
                     }
                 }
 
-
-                //arrivato a casa
                 Console.Write("X");
                 Console.CursorLeft--;
             }
@@ -207,29 +205,138 @@ namespace DrunkPeopleTest
         void GoHome();
     }
 
+     //* Il metodo GoHome() dei Drunk funziona quindi così:
+     //* - chiedo all'IDrunkLevel IsDrunk().
+     //* - se no, vado dritto a casa perché sono sobrio.
+     //* - altrimenti, faccio il percorso sgangherato in base al mio tipo (è la parte abstract del metodo TEMPLATE)
+     //* - alla fine, arrivato all'ultima riga, faccio i passi necessari per arrivare dritto a casa.
+
     abstract class Drunk : IDrunk
     {
         public IDrunkLevel drunkLevel { get; set; }
         
-        void GoHome()
+        public void GoHome()
         {
 
+            if (!drunkLevel.IsDrunk())
+            {
+                //vai a casa dritto
+            };
+
+            var r = new Random();
+
+            CalculateStreet(r);
+
+            LastLineStree(r);
+
+            ArrivedHome();
+            
         }
 
-        void IDrunk.GoHome()
+        private void LastLineStree(Random r)
         {
-            throw new NotImplementedException();
+            if (Console.CursorLeft < 20)
+            {
+                while (Console.CursorLeft < 20)
+                {
+                    Thread.Sleep(r.Next(1, 10) * 25);
+                    Console.Write("0");
+                }
+            }
+            else
+            {
+                while (Console.CursorLeft > 20)
+                {
+                    Thread.Sleep(r.Next(1, 10) * 25);
+                    Console.Write("0");
+                    Console.CursorLeft--;
+                    Console.CursorLeft--;
+                }
+            }
         }
+
+        private void ArrivedHome()
+        {
+            Console.Write("X");
+            Console.CursorLeft--;
+        }
+
+        internal abstract void CalculateStreet(Random r);
     }
 
     class WineDrunk : Drunk
     {
-        // implementazione dei metodi astratti di GoHome();
+        internal override void CalculateStreet(Random r)
+        {
+            while (Console.CursorTop < 20)
+            {
+                var stepsRight = drunkLevel.CalculateMoreSteps();
+                for (int i = 0; i < stepsRight; i++)
+                {
+                    Thread.Sleep(r.Next(1, 10) * 25);
+                    Console.CursorLeft++;
+                    Console.Write("0");
+                    Console.CursorLeft--;
+                }
+
+                var stepsDownLeft = drunkLevel.CalculateLessSteps();
+                for (int i = 0; i < stepsDownLeft; i++)
+                {
+                    Thread.Sleep(r.Next(1, 10) * 25);
+                    Console.CursorTop++;
+                    Console.CursorLeft--;
+                    Console.Write("0");
+                    Console.CursorLeft--;
+                }
+            }
+        }
     }
 
     class BeerDrunk : Drunk
     {
-        // implementazione dei metodi astratti di GoHome();
+        internal override void CalculateStreet(Random r)
+        {
+            while (Console.CursorTop < 20)
+            {
+                Thread.Sleep(500);
+
+                var stepsRight = drunkLevel.CalculateMoreSteps();
+                for (int i = 0; i < stepsRight; i++)
+                {
+                    Thread.Sleep(r.Next(1, 10) * 25);
+                    Console.CursorLeft++;
+                    Console.Write("0");
+                    Console.CursorLeft--;
+                }
+
+                var stepsDown = drunkLevel.CalculateLessSteps();
+                for (int i = 0; i < stepsDown; i++)
+                {
+                    Thread.Sleep(r.Next(1, 10) * 25);
+                    Console.CursorTop++;
+                    Console.Write("0");
+                    Console.CursorLeft--;
+                }
+
+                var stepsLeft = drunkLevel.CalculateMoreSteps();
+                for (int i = 0; i < stepsLeft; i++)
+                {
+                    Thread.Sleep(r.Next(1, 10) * 25);
+                    Console.CursorLeft--;
+                    Console.Write("0");
+                    Console.CursorLeft--;
+                }
+
+                stepsDown = drunkLevel.CalculateLessSteps();
+                for (int i = 0; i < stepsDown; i++)
+                {
+                    Thread.Sleep(r.Next(1, 10) * 25);
+                    Console.CursorTop++;
+                    Console.Write("0");
+                    Console.CursorLeft--;
+                }
+            }
+        }
     }
 
     interface IDrunkLevel
@@ -248,11 +355,13 @@ namespace DrunkPeopleTest
 
         public int CalculateMoreSteps()
         {
+            // !!!!!!!!!!!!!!!!!!!!
             throw new NotImplementedException();            
         }
 
         public int CalculateLessSteps()
         {
+            // !!!!!!!!!!!!!!!!!!!!
             throw new NotImplementedException();
         }
     }
