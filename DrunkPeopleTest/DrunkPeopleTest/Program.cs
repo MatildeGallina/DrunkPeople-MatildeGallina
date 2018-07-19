@@ -77,9 +77,7 @@ namespace DrunkPeopleTest
 
                 while (Console.CursorTop < 20)
                 {
-                    // non è molto ubriaco
                     var stepsRight = r.Next(1, !muchDrunk ? 10 : 5);
-                    //movimento verso destra
                     for (int i = 0; i < stepsRight; i++)
                     {
                         Thread.Sleep(r.Next(1, 10) * 25);
@@ -89,8 +87,6 @@ namespace DrunkPeopleTest
                     }
 
                     var stepsDownLeft = r.Next(1, !muchDrunk ? 12 : 6);
-
-                    //movimento in diagonale verso il basso a sinistra
                     for (int i = 0; i < stepsDownLeft; i++)
                     {
                         Thread.Sleep(r.Next(1, 10) * 25);
@@ -99,11 +95,8 @@ namespace DrunkPeopleTest
                         Console.Write("0");
                         Console.CursorLeft--;
                     }
-                    // end
                 }
 
-
-                // ultima riga torna a casa dritto
                 if (Console.CursorLeft < 20)
                 {
                     while (Console.CursorLeft < 20)
@@ -123,7 +116,6 @@ namespace DrunkPeopleTest
                     }
                 }
 
-                //arrivato a casa
                 Console.Write("X");
                 Console.CursorLeft--;
             }
@@ -204,23 +196,28 @@ namespace DrunkPeopleTest
     {
         void GoHome();
     }
-
-     //* Il metodo GoHome() dei Drunk funziona quindi così:
-     //* - chiedo all'IDrunkLevel IsDrunk().
-     //* - se no, vado dritto a casa perché sono sobrio.
-     //* - altrimenti, faccio il percorso sgangherato in base al mio tipo (è la parte abstract del metodo TEMPLATE)
-     //* - alla fine, arrivato all'ultima riga, faccio i passi necessari per arrivare dritto a casa.
-
+    
     abstract class Drunk : IDrunk
     {
-        public IDrunkLevel drunkLevel { get; set; }
+        public IDrunkLevel drunkLevel
+        {
+            get { return _DrunkLevel; }
+            set { _DrunkLevel = value ?? NullDrunkLevel.Instance; }
+        }
+        private IDrunkLevel _DrunkLevel;
         
         public void GoHome()
         {
+            StartFromPub();
 
             if (!drunkLevel.IsDrunk())
             {
-                //vai a casa dritto
+                while (Console.CursorTop < 20)
+                {
+                    Console.Write("0");
+                    Console.CursorLeft--;
+                    Console.CursorTop++;
+                }
             };
 
             var r = new Random();
@@ -231,6 +228,15 @@ namespace DrunkPeopleTest
 
             ArrivedHome();
             
+        }
+
+        private void StartFromPub()
+        {
+            Console.CursorLeft = 20;
+            Console.CursorTop = 0;
+
+            Console.Write("0");
+            Console.CursorLeft--;
         }
 
         private void LastLineStree(Random r)
@@ -355,14 +361,12 @@ namespace DrunkPeopleTest
 
         public int CalculateMoreSteps()
         {
-            // !!!!!!!!!!!!!!!!!!!!
-            throw new NotImplementedException();            
+            return 1;
         }
 
         public int CalculateLessSteps()
         {
-            // !!!!!!!!!!!!!!!!!!!!
-            throw new NotImplementedException();
+            return 1;
         }
     }
 
@@ -406,9 +410,35 @@ namespace DrunkPeopleTest
         }
     }
 
+    class NullDrunkLevel : IDrunkLevel
+    {
+        static NullDrunkLevel()
+        {
+            Instance = new NullDrunkLevel();
+        }
+
+        public static NullDrunkLevel Instance { get; }
+
+        private NullDrunkLevel() { }
+
+        public bool IsDrunk()
+        {
+            return false;
+        }
+
+        public int CalculateLessSteps()
+        {
+            return 0;
+        }
+
+        public int CalculateMoreSteps()
+        {
+            return 1;
+        }
+    }
+
     class Pub
     {
-        // classe factory
         private static IDrunk CreateDrunk(string type)
         {
             IDrunk dk;
@@ -427,8 +457,7 @@ namespace DrunkPeopleTest
 
             return dk;
         }
-
-        #region Singleton
+        
         private Pub() { }
 
         static Pub()
@@ -437,6 +466,5 @@ namespace DrunkPeopleTest
         }
 
         public static Pub Instance { get; }
-        #endregion
     }
 }
