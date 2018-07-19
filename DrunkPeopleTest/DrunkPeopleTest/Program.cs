@@ -49,150 +49,10 @@ namespace DrunkPeopleTest
     {
         static void Main(string[] args)
         {
-            BringDrunkToHome(true, "beer", false);
-
-            Console.Read();
         }
-
-        static void BringDrunkToHome(bool isDrunk, string type, bool muchDrunk)
-        {
-            Console.CursorLeft = 20;
-            Console.CursorTop = 0;
-
-            Console.Write("0");
-            Console.CursorLeft--;
-
-            if (!isDrunk)
-            {
-                while (Console.CursorTop < 20)
-                {
-                    Console.Write("0");
-                    Console.CursorLeft--;
-                    Console.CursorTop++;
-                }
-            }
-            else if (type == "wine")
-            {
-                var r = new Random();
-
-                while (Console.CursorTop < 20)
-                {
-                    var stepsRight = r.Next(1, !muchDrunk ? 10 : 5);
-                    for (int i = 0; i < stepsRight; i++)
-                    {
-                        Thread.Sleep(r.Next(1, 10) * 25);
-                        Console.CursorLeft++;
-                        Console.Write("0");
-                        Console.CursorLeft--;
-                    }
-
-                    var stepsDownLeft = r.Next(1, !muchDrunk ? 12 : 6);
-                    for (int i = 0; i < stepsDownLeft; i++)
-                    {
-                        Thread.Sleep(r.Next(1, 10) * 25);
-                        Console.CursorTop++;
-                        Console.CursorLeft--;
-                        Console.Write("0");
-                        Console.CursorLeft--;
-                    }
-                }
-
-                if (Console.CursorLeft < 20)
-                {
-                    while (Console.CursorLeft < 20)
-                    {
-                        Thread.Sleep(r.Next(1, 10) * 25);
-                        Console.Write("0");
-                    }
-                }
-                else
-                {
-                    while (Console.CursorLeft > 20)
-                    {
-                        Thread.Sleep(r.Next(1, 10) * 25);
-                        Console.Write("0");
-                        Console.CursorLeft--;
-                        Console.CursorLeft--;
-                    }
-                }
-
-                Console.Write("X");
-                Console.CursorLeft--;
-            }
-            else if (type == "beer")
-            {
-                var r = new Random();
-
-                while (Console.CursorTop < 20)
-                {
-                    Thread.Sleep(500);
-
-                    var stepsRight = r.Next(1, !muchDrunk ? 14 : 7);
-                    for (int i = 0; i < stepsRight; i++)
-                    {
-                        Thread.Sleep(r.Next(1, 10) * 25);
-                        Console.CursorLeft++;
-                        Console.Write("0");
-                        Console.CursorLeft--;
-                    }
-
-                    var stepsDown = r.Next(1, !muchDrunk ? 8 : 4);
-                    for (int i = 0; i < stepsDown; i++)
-                    {
-                        Thread.Sleep(r.Next(1, 10) * 25);
-                        Console.CursorTop++;
-                        Console.Write("0");
-                        Console.CursorLeft--;
-                    }
-
-                    var stepsLeft = r.Next(1, muchDrunk ? 14 : 7);
-                    for (int i = 0; i < stepsLeft; i++)
-                    {
-                        Thread.Sleep(r.Next(1, 10) * 25);
-                        Console.CursorLeft--;
-                        Console.Write("0");
-                        Console.CursorLeft--;
-                    }
-
-                    stepsDown = r.Next(1, muchDrunk ? 10 : 5);
-                    for (int i = 0; i < stepsDown; i++)
-                    {
-                        Thread.Sleep(r.Next(1, 10) * 25);
-                        Console.CursorTop++;
-                        Console.Write("0");
-                        Console.CursorLeft--;
-                    }
-                }
-
-                if (Console.CursorLeft < 20)
-                {
-                    while (Console.CursorLeft < 10)
-                    {
-                        Console.Write("0");
-                    }
-                }
-                else
-                {
-                    while (Console.CursorLeft > 20)
-                    {
-                        Thread.Sleep(r.Next(1, 10) * 25);
-                        Console.Write("0");
-                        Console.CursorLeft--;
-                        Console.CursorLeft--;
-                    }
-                }
-
-                Console.Write("X");
-                Console.CursorLeft--;
-            }
-
-            else
-                throw new Exception("unknown type!");
-        }
-
     }
 
-    interface IDrunk
+    public interface IDrunk
     {
         void GoHome();
     }
@@ -437,9 +297,9 @@ namespace DrunkPeopleTest
         }
     }
 
-    class Pub
+    public class Pub
     {
-        private static IDrunk CreateDrunk(string type)
+        public static IDrunk CreateDrunk(string type)
         {
             IDrunk dk;
 
@@ -458,7 +318,7 @@ namespace DrunkPeopleTest
             return dk;
         }
         
-        private Pub() { }
+        internal Pub() { }
 
         static Pub()
         {
