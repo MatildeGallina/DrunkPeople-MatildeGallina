@@ -235,7 +235,8 @@ namespace DrunkPeopleTest
     interface IDrunkLevel
     {
         bool IsDrunk();
-        List<int> CalculateMaxSteps();
+        int CalculateMoreSteps();
+        int CalculateLessSteps();
     }
 
     class IsNotDrunk : IDrunkLevel
@@ -245,9 +246,14 @@ namespace DrunkPeopleTest
             return false;
         }
 
-        public List<int> CalculateMaxSteps()
+        public int CalculateMoreSteps()
         {
             throw new NotImplementedException();            
+        }
+
+        public int CalculateLessSteps()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -258,14 +264,16 @@ namespace DrunkPeopleTest
             return true;
         }
 
-        public List<int> CalculateMaxSteps()
+        public int CalculateMoreSteps()
         {
             var r = new Random();
-            return new List<int>
-            {
-                r.Next(1, 12),
-                r.Next(1, 8),
-            };
+            return r.Next(1, 12);
+        }
+
+        public int CalculateLessSteps()
+        {
+            var r = new Random();
+            return r.Next(1, 8);
         }
     }
 
@@ -276,14 +284,16 @@ namespace DrunkPeopleTest
             return true;
         }
 
-        public List<int> CalculateMaxSteps()
+        public int CalculateMoreSteps()
         {
             var r = new Random();
-            return new List<int>
-            {
-                r.Next(1, 7),
-                r.Next(1, 5),
-            };
+            return r.Next(1, 7);
+        }
+
+        public int CalculateLessSteps()
+        {
+            var r = new Random();
+            return r.Next(1, 5);
         }
     }
 
